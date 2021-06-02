@@ -1,0 +1,19 @@
+---
+- hosts: web1
+  #become: true 
+
+  tasks:
+  - name: building docker image
+    command: "docker build -t php-image ." 
+    args:
+      chdir: /opt/docker
+
+  - name: add tag to the image
+    command: docker tag php-image athirac/phpimage
+
+  - name: push image to dockerhub
+    command: docker push athirac/phpimage
+
+  - name: Remove image from ansible server
+    command: docker rmi php-image athirac/phpimage
+    ignore_errors: yes

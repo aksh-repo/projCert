@@ -1,0 +1,21 @@
+---
+- hosts: all
+
+  tasks:
+  - name: Stop current running container
+    command: docker stop phpcontainer
+    ignore_errors: yes
+
+  - name: Remove stopped containers
+    command: docker rm phpcontainer
+    ignore_errors: yes
+
+  - name: Remove docker image
+    command: docker rmi athirac/phpimage
+    ignore_errors: yes
+
+  - name: Pull dockerImage from dockerhub
+    command: docker pull athirac/phpimage
+    
+  - name: Create container using this image
+    command: docker container run -d --name phpcontainer -p 8080:80 athirac/phpimage

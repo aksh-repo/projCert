@@ -1,0 +1,53 @@
+- hosts: test
+  become: true
+  vars :
+   mytext: |
+     [google-chrome]
+     name=google-chrome
+     baseurl=http://dl.google.com/linux/chrome/rpm/stable/$basearch
+     enabled=1
+     gpgcheck=1
+     gpgkey=https://dl-ssl.google.com/linux/linux_signing_key.pub
+   updatetest : |
+  tasks:
+   - name: Creating a file with content
+     file:
+      path: "/etc/yum.repos.d/google-chrome.repo"
+      mode: 0777
+      owner: root
+      state: touch
+   - name: create File content
+     copy:
+       dest: "/etc/yum.repos.d/google-chrome.repo"
+       content: "{{ mytext }}"
+   - name: Install Chrome
+     yum:
+      name: google-chrome-stable
+      state: present
+      update_cache: yes
+   - name: Epel-release
+     yum:
+      name: epel-release
+      state: present
+      update_cache: yes
+   - name: install chromium
+     yum:
+       name: chromium
+       state: present
+   - name: chromedriver
+     yum:
+       name: chromedriver
+       state: present
+   - name: Install git
+     yum:
+       name: git
+       state: present
+   - name: Install pip
+     yum:
+       name: python-pip
+       state: present
+   - name: Selenium
+     pip:
+       name: selenium
+       state: present
+       
